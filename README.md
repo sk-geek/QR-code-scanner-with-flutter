@@ -1,16 +1,11 @@
 # my_app
 
-A new Flutter project.
+well, this is my first flutter app.
+It has a login system built using [firebase](https://firebase.google.com) and [firebase auth](https://pub.dev/packages/firebase_auth)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+طبعا هذا اول برنامج الي بهاي اللغة
+بيه نظام تسجيل دخول وانشاء حساب ونسيان كلمة المرور
+ وكله مصنوع ب [firbase](https://firebase.google.com) و [firebase_auth](https://pub.dev/packages/firebase_auth)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[telegram](https://t.me/myflutterjourney)
