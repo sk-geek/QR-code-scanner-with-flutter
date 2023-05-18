@@ -74,17 +74,6 @@ class _HomeAppPageState extends State<HomeAppPage> {
                     key: qrKey,
                     onQRViewCreated: _onQRViewCreated,
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        Expanded(child: Container()),
-                        Card(
-                          child: Column(children: []),
-                        )
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
@@ -92,14 +81,14 @@ class _HomeAppPageState extends State<HomeAppPage> {
         ),
       ),
       // drawer: myDrawer(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("QR generator is coming soon...")));
-        },
-        label: Text("Create"),
-        icon: Icon(Icons.add_outlined),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //         SnackBar(content: Text("QR generator is coming soon...")));
+      //   },
+      //   label: Text("Create"),
+      //   icon: Icon(Icons.add_outlined),
+      // ),
     );
   }
 
