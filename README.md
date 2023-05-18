@@ -1,25 +1,18 @@
-# my_app
-
-well, this is my first flutter app.
-It has a login system built using [firebase](https://firebase.google.com) and [firebase auth](https://pub.dev/packages/firebase_auth)
-
-
-طبعا هذا اول برنامج الي بهاي اللغة
-بيه نظام تسجيل دخول وانشاء حساب ونسيان كلمة المرور
- وكله مصنوع ب [firbase](https://firebase.google.com) و [firebase_auth](https://pub.dev/packages/firebase_auth)
+# Qr cdoe scanner with flutter
+This app has a simple Ui where you just point the camera at any QR code and it detects and reads it!
 
 # installation التثبيت
 
 execute these commands:
 شغل هذه الأوامر:
 ```
-$ git clone https://github.com/sk-geek/myFirstFlutterApp.git
+$ git clone https://github.com/sk-geek/QR-code-scanner-with-flutter.git
 ```
 move to project directory:
 انتقل الى مجلد المشروع
 
 ```
-$ cd myFirstFlutterApp/
+$ cd QR-code-scanner-with-flutter/
 ```
 Get flutter dependencies 
 حمل مستلزمات المشروع
