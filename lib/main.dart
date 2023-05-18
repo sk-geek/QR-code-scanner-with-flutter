@@ -1,18 +1,25 @@
 // ignore_for_file: prefer_const_constructors, unused_import, unused_local_variable, unused_field, no_leading_underscores_for_local_identifiers, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/pages/Home_App_Page.dart';
+import 'package:my_app/pages/sign_up.dart';
+import 'package:my_app/utils/widgets.dart';
 import 'firebase_options.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutterfire_ui/auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //open a hive box
+  var box = Hive.openBox("creds");
   runApp(const MyApp());
 }
+
 bool isEmpty = false;
 String confirmedPassword = '';
 
@@ -33,6 +40,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
         colorSchemeSeed: Color.fromARGB(170, 0, 4, 248),
       ),
+      debugShowCheckedModeBanner: false,
       routes: {
         '/login': (_) => MyHomePage(
               title: "Login",
@@ -40,147 +48,7 @@ class _MyAppState extends State<MyApp> {
         '/home': (_) => HomeAppPage(),
         '/signup': (_) => SignUpPage()
       },
-      initialRoute: '/login',
-    );
-  }
-}
-
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
-
-  @override
-  State<SignUpPage> createState() => _SignUpPageState();
-}
-
-class _SignUpPageState extends State<SignUpPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Sign Up'),
-        ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-              EmailInput(),
-              PasswordInput(),
-              PasswordConfirmInput(),
-              signUpButton(context),
-              Text('OR'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(onPressed: () => Navigator.popAndPushNamed(context, "/login"), child: Text("Login to an existing account"))
-                ],
-              )
-            ])));
-  }
-
-  Container signUpButton(BuildContext context) {
-    return Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              child: FilledButton.icon(
-                  icon: Icon(Icons.add),
-                  label: Text("Create account"),
-                  onPressed: () async{
-                    if (email == '' ||
-                        password == '' ||
-                        confirmedPassword == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please fill all fields")));
-                    } else if (password != confirmedPassword) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Passwords do not match")));
-                    } else {
-                      await _auth.createUserWithEmailAndPassword(
-                        email: email, 
-                        password: password)
-                        .then(
-                          (value) async{
-                            ScaffoldMessenger
-                          .of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Account created")
-                                )
-                              );
-                              await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) => Navigator.popAndPushNamed(context, '/home')).onError((error, stackTrace) => showSignupError(error));
-                          }
-                            ).onError((error, stackTrace) => showSignupError(error));
-                    }
-                  }),
-            );
-  }
-  
-  showSignupError(Object? error) {
-    showDialog(context: context, 
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Error'),
-        content: Text(error.toString()),
-        actions: [
-          FilledButton(onPressed: () => Navigator.pop(context), child: Text("OK"))
-        ],
-      );
-    });
-  }
-}
-
-class PasswordConfirmInput extends StatefulWidget {
-  const PasswordConfirmInput({
-    super.key,
-  });
-
-  @override
-  State<PasswordConfirmInput> createState() => _PasswordConfirmInputState();
-}
-
-class _PasswordConfirmInputState extends State<PasswordConfirmInput> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: "Confirm Password",
-          hintText: "Enter Password Again",
-          icon: Icon(Icons.lock_outline),
-          errorText: isEmpty ? "This field is required" : null,
-        ),
-        obscureText: true,
-        onChanged: (value) {
-          if (value == '') {
-            setState(() {
-              isEmpty = true;
-            });
-          } else {
-            setState(() {
-              isEmpty = false;
-            });
-            confirmedPassword = value;
-          }
-        },
-      ),
-    );
-  }
-}
-
-class HomeAppPage extends StatelessWidget {
-  const HomeAppPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
-      body: Center(
-        child: FilledButton(
-            child: Text('Sign out'),
-            onPressed: () async {
-              _auth.signOut().then((value) => Navigator.popAndPushNamed(context,'/login'));
-            }),
-      ),
+      initialRoute: '/home',
     );
   }
 }
@@ -294,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                  icon: Icon(Icons.error),
+                  icon: Icon(Icons.error_outline),
                   title: Text("Error"),
                   content: Text(e.toString()),
                   actions: <Widget>[
@@ -384,83 +252,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ])
               ]);
         });
-  }
-}
-
-class PasswordInput extends StatefulWidget {
-  const PasswordInput({
-    super.key,
-  });
-
-  @override
-  State<PasswordInput> createState() => _PasswordInputState();
-}
-
-class _PasswordInputState extends State<PasswordInput> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      child: TextField(
-          decoration: InputDecoration(
-            hintText: 'Enter your password',
-            labelText: 'Password',
-            icon: Icon(Icons.lock_open),
-            errorText: isEmpty ? "This field is required" : null,
-          ),
-          obscureText: true,
-          onChanged: (String value) {
-            if (value == '') {
-              setState(() {
-                isEmpty = true;
-              });
-            } else {
-              setState(() {
-                isEmpty = false;
-              });
-            }
-            password = value;
-          }),
-    );
-  }
-}
-
-class EmailInput extends StatefulWidget {
-  const EmailInput({
-    super.key,
-  });
-
-  @override
-  State<EmailInput> createState() => _EmailInputState();
-}
-
-class _EmailInputState extends State<EmailInput> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      child: TextField(
-        decoration: InputDecoration(
-          icon: Icon(Icons.email_outlined),
-          hintText: "email@provider.domain",
-          label: Text('Email'),
-          errorText: isEmpty ? "This field is required" : null,
-        ),
-        keyboardType: TextInputType.emailAddress,
-        onChanged: (value) {
-          if (value == '') {
-            setState(() {
-              isEmpty = true;
-            });
-          } else {
-            setState(() {
-              isEmpty = false;
-            });
-          }
-          email = value;
-        },
-      ),
-    );
   }
 }
 
