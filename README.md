@@ -1,5 +1,6 @@
 # Qr cdoe scanner with flutter
 This app has a simple Ui where you just point the camera at any QR code and it detects and reads it!
+it works on IOS and Android only
 
 # installation التثبيت
 
