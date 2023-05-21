@@ -23,7 +23,7 @@ void onQrGotCaptured(
                 child: FilledButton(
                     onPressed: () async {
                       await Clipboard.setData(
-                          ClipboardData(text: scanData.toString()));
+                          ClipboardData(text: scanData.code!));
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text("Text copied!"),
                       ));
@@ -37,7 +37,7 @@ void onQrGotCaptured(
                 width: double.infinity,
                 child: FilledButton.icon(
                   onPressed: () async {
-                    Share.share("${scanData.toString()}");
+                    Share.share("${scanData.code}");
                     await controller
                         ?.resumeCamera()
                         .then((value) => Navigator.of(context).pop());
