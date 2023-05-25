@@ -11,12 +11,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //open a hive box
-  var box = Hive.openBox("creds");
   runApp(const MyApp());
 }
 
@@ -48,7 +45,7 @@ class _MyAppState extends State<MyApp> {
         '/home': (_) => HomeAppPage(),
         '/signup': (_) => SignUpPage()
       },
-      initialRoute: '/home',
+      initialRoute: '/login',
     );
   }
 }
@@ -61,6 +58,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  void initState() {
+    initttt();
+    super.initState();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +90,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.popAndPushNamed(context, '/signup');
                 },
               )
-            ])
+            ]),
+            Expanded(
+              child: Container(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Having issues?"),
+                TextButton(
+                    child: Text("Contact us"),
+                    onPressed: () {
+                      // TODO add contact us page
+                    })
+              ],
+            )
           ],
         ),
       ),
@@ -154,9 +172,25 @@ class _MyHomePageState extends State<MyHomePage> {
           });
     } else {
       try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final UidFA = _auth.currentUser?.uid;
+
         final credintial = await _auth
             .signInWithEmailAndPassword(email: email, password: password)
-            .then((value) => Navigator.popAndPushNamed(context, "/home"));
+            .then(
+          (value) {
+            Map creds = {
+              "email": email,
+              "password": password,
+              "uid": UidFA,
+            };
+            prefs.setString("email", creds["email"]);
+            prefs.setString("password", creds["password"]);
+            prefs.setString("uid", creds["uid"]);
+            prefs.setString("isLogged", creds["isLogged"]);
+            Navigator.popAndPushNamed(context, "/home");
+          },
+        );
       } catch (e) {
         showDialog(
             context: context,
@@ -253,7 +287,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ]);
         });
   }
+  void initttt() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("email")) {
+      email = await prefs.getString("email")!;
+      password = await prefs.getString("password")!;
+      _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) => Navigator.popAndPushNamed(context, "/home"));
+    }
 }
+}
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String email = "";

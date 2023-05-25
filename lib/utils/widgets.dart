@@ -106,8 +106,6 @@ class _PasswordConfirmInputState extends State<PasswordConfirmInput> {
             setState(() {
               isEmpty = true;
             });
-          } else if (value == "I confirm it") {
-            //TODO implement zeej player here
           } else {
             setState(() {
               isEmpty = false;

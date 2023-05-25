@@ -1,6 +1,9 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:io';
 
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -9,6 +12,7 @@ import '../utils/Qr_reciver.dart';
 
 class HomeAppPage extends StatefulWidget {
   const HomeAppPage({super.key});
+  
 
   @override
   State<HomeAppPage> createState() => _HomeAppPageState();
