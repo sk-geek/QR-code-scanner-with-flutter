@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/utils/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -56,7 +57,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Text("Login to an existing account"))
                 ],
               )
-            ])));
+            ])),
+            drawer: QeDrawer(),
+            );
   }
 
   Container signUpButton(BuildContext context) {
@@ -83,17 +86,19 @@ class _SignUpPageState extends State<SignUpPage> {
                   .then((value) async {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text("Account created")));
-                    SharedPreferences prefs =await SharedPreferences.getInstance();
-                    await prefs.setString("email", email);
-                    await prefs.setString("password",password);
-                    await prefs.setString("uid", _auth.currentUser!.uid).then((value) async{
-                      await _auth
-                    .signInWithEmailAndPassword(
-                        email: email, password: password)
-                    .then(
-                        (value) => Navigator.popAndPushNamed(context, '/home'))
-                    .onError((error, stackTrace) => showSignupError(error));
-                    },);
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setString("email", email);
+                await prefs.setString("password", password);
+                await prefs.setString("uid", _auth.currentUser!.uid).then(
+                  (value) async {
+                    await _auth
+                        .signInWithEmailAndPassword(
+                            email: email, password: password)
+                        .then((value) =>
+                            Navigator.popAndPushNamed(context, '/home'))
+                        .onError((error, stackTrace) => showSignupError(error));
+                  },
+                );
               }).onError((error, stackTrace) => showSignupError(error));
             }
           }),
