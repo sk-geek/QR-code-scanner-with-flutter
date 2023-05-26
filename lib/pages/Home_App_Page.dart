@@ -79,6 +79,10 @@ class _HomeAppPageState extends State<HomeAppPage> {
                     key: qrKey,
                     onQRViewCreated: _onQRViewCreated,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 100),
+                    child: Center(child: Image.asset("assets/frame.png")),
+                  )
                 ],
               ),
             ),

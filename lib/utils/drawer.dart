@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class QeDrawer extends StatefulWidget {
   QeDrawer({super.key});
@@ -63,6 +65,56 @@ class _QeDrawerState extends State<QeDrawer> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100)),
             onTap: () => selectTab(1),
+          ),
+          ListTile(
+            title: Text("About app"),
+            selected: _selectedDestination == 5,
+            selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
+            leading: Icon(Icons.info_outline),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100)),
+            onTap: () {
+              showAboutDialog(
+                context: context,
+                applicationIcon: Icon(Icons.qr_code),
+                applicationName: "Qr scanner",
+                applicationVersion: "1.0",
+                children: [
+                  Text(
+                      "This app was made by Ahmed Abbas using flutter\nIt is licensed under MIT license"),
+                  Row(
+                    children: [
+                      Text("Source code:"),
+                      TextButton(
+                          onPressed: () => launchUrlString(
+                              "https://github.com/sk-geek/QR-code-scanner-with-flutter",
+                              mode: LaunchMode.externalApplication),
+                          child: Text(
+                            "GitHub link",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("Telegram:"),
+                      TextButton(
+                          onPressed: () => launchUrlString(
+                              "https://t.me/myflutterjourney",
+                              mode: LaunchMode.externalApplication),
+                          child: Text(
+                            "Telegram link",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline
+                            ),
+                          )),
+                    ],
+                  )
+                ],
+              );
+            },
           ),
           Expanded(
             child: Container(),
