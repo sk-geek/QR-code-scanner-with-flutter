@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:my_app/utils/drawer.dart';
 import 'dart:io';
 
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -84,15 +85,15 @@ class _HomeAppPageState extends State<HomeAppPage> {
           ],
         ),
       ),
-      // drawer: myDrawer(),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     ScaffoldMessenger.of(context).showSnackBar(
-      //         SnackBar(content: Text("QR generator is coming soon...")));
-      //   },
-      //   label: Text("Create"),
-      //   icon: Icon(Icons.add_outlined),
-      // ),
+      drawer: QeDrawer(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("QR generator is coming soon...")));
+        },
+        label: Text("Create"),
+        icon: Icon(Icons.add_outlined),
+      ),
     );
   }
 

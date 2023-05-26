@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,
-        colorSchemeSeed: Color.fromARGB(170, 0, 4, 248),
+        colorSchemeSeed: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
       routes: {
@@ -58,11 +58,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void initState() {
     initttt();
     super.initState();
-    
   }
 
   @override
@@ -182,12 +180,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Map creds = {
               "email": email,
               "password": password,
-              "uid": UidFA,
             };
             prefs.setString("email", creds["email"]);
             prefs.setString("password", creds["password"]);
-            prefs.setString("uid", creds["uid"]);
-            prefs.setString("isLogged", creds["isLogged"]);
             Navigator.popAndPushNamed(context, "/home");
           },
         );
@@ -287,18 +282,32 @@ class _MyHomePageState extends State<MyHomePage> {
               ]);
         });
   }
-  void initttt() async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  void initttt() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey("email")) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Loading'),
+            content: Row(
+              children: [CircularProgressIndicator()],
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+            ),
+          );
+        },
+      );
       email = await prefs.getString("email")!;
       password = await prefs.getString("password")!;
       _auth
           .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) => Navigator.pop(context))
           .then((value) => Navigator.popAndPushNamed(context, "/home"));
     }
+  }
 }
-}
-
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String email = "";
